@@ -3,36 +3,39 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 
 class AboutRegularExpressions < EdgeCase::Koan
   def test_a_pattern_is_a_regular_expression
-    assert_equal __, /pattern/.class
+    assert_equal Regexp, /pattern/.class
   end
 
+  # NOTE: wow~
   def test_a_regexp_can_search_a_string_for_matching_content
-    assert_equal __, "some matching content"[/match/]
+    assert_equal 'match', "some matching content"[/match/]
   end
 
   def test_a_failed_match_returns_nil
-    assert_equal __, "some matching content"[/missing/]
+    assert_equal nil, "some matching content"[/missing/]
   end
 
   # ------------------------------------------------------------------
 
   def test_question_mark_means_optional
-    assert_equal __, "abbcccddddeeeee"[/ab?/]
-    assert_equal __, "abbcccddddeeeee"[/az?/]
+    assert_equal 'ab', "abbcccddddeeeee"[/ab?/]
+    assert_equal 'a', "abbcccddddeeeee"[/az?/]
   end
 
   def test_plus_means_one_or_more
-    assert_equal __, "abbcccddddeeeee"[/bc+/]
+    assert_equal 'bccc', "abbcccddddeeeee"[/bc+/]
   end
 
   def test_asterisk_means_zero_or_more
-    assert_equal __, "abbcccddddeeeee"[/ab*/]
-    assert_equal __, "abbcccddddeeeee"[/az*/]
-    assert_equal __, "abbcccddddeeeee"[/z*/]
+    assert_equal 'abb', "abbcccddddeeeee"[/ab*/]
+    assert_equal 'a', "abbcccddddeeeee"[/az*/]
+    assert_equal '', "abbcccddddeeeee"[/z*/]
 
     # THINK ABOUT IT:
     #
     # When would * fail to match?
+    #
+    # Never, because empty string is a substring of every string
   end
 
   # THINK ABOUT IT:
@@ -40,6 +43,8 @@ class AboutRegularExpressions < EdgeCase::Koan
   # We say that the repetition operators above are "greedy."
   #
   # Why?
+  #
+  # Match as much as possible
 
   # ------------------------------------------------------------------
 

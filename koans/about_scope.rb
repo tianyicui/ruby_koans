@@ -73,7 +73,8 @@ class AboutScope < EdgeCase::Koan
   end
 
   def test_you_can_get_a_list_of_constants_for_any_class_or_module
-    assert_equal [:Dog], Jims.constants
+    # XXX
+    assert_equal ruby_version?('1.9')?[:Dog]:['Dog'], Jims.constants
     assert Object.constants.size > 10
   end
 end

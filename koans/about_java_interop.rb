@@ -14,17 +14,17 @@ include Java
 class AboutJavaInterop < EdgeCase::Koan
   def test_using_a_java_library_class
     java_array = java.util.ArrayList.new
-    assert_equal __, java_array.class
+    assert_equal Java::JavaUtil::ArrayList, java_array.class
   end
 
   def test_java_class_can_be_referenced_using_both_ruby_and_java_like_syntax
-    assert_equal __, Java::JavaUtil::ArrayList == java.util.ArrayList
+    assert_equal true, Java::JavaUtil::ArrayList == java.util.ArrayList
   end
 
   def test_include_class_includes_class_in_module_scope
     assert_nil defined?(TreeSet)
     include_class "java.util.TreeSet"
-    assert_equal __, defined?(TreeSet)
+    assert_equal 'constant', defined?(TreeSet)
   end
 
   # THINK ABOUT IT:
@@ -36,43 +36,45 @@ class AboutJavaInterop < EdgeCase::Koan
   # What would be the value of the String constant after this
   # include_class is run?  Would it be useful to provide a way of
   # aliasing java classes to different names?
+  #
+  # TODO
 
   JString = java.lang.String
   def test_also_java_class_can_be_given_ruby_aliases
     java_string = JString.new("A Java String")
-    assert_equal __, java_string.class
-    assert_equal __, JString
+    assert_equal JString, java_string.class
+    assert_equal Java::JavaLang::String, JString
   end
 
   def test_can_directly_call_java_methods_on_java_objects
     java_string = JString.new("A Java String")
-    assert_equal __, java_string.toLowerCase
+    assert_equal "a java string", java_string.toLowerCase
   end
 
   def test_jruby_provides_snake_case_versions_of_java_methods
     java_string = JString.new("A Java String")
-    assert_equal __, java_string.to_lower_case
+    assert_equal "a java string", java_string.to_lower_case
   end
 
   def test_jruby_provides_question_mark_versions_of_boolean_methods
     java_string = JString.new("A Java String")
-    assert_equal __, java_string.endsWith("String")
-    assert_equal __, java_string.ends_with("String")
-    assert_equal __, java_string.ends_with?("String")
+    assert_equal true, java_string.endsWith("String")
+    assert_equal true, java_string.ends_with("String")
+    assert_equal true, java_string.ends_with?("String")
   end
 
   def test_java_string_are_not_ruby_strings
     ruby_string = "A Java String"
     java_string = java.lang.String.new(ruby_string)
-    assert_equal __, java_string.is_a?(java.lang.String)
-    assert_equal __, java_string.is_a?(String)
+    assert_equal true, java_string.is_a?(java.lang.String)
+    assert_equal false, java_string.is_a?(String)
   end
 
   def test_java_strings_can_be_compared_to_ruby_strings_maybe
     ruby_string = "A Java String"
     java_string = java.lang.String.new(ruby_string)
-    assert_equal __, ruby_string == java_string
-    assert_equal __, java_string == ruby_string
+    assert_equal false, ruby_string == java_string
+    assert_equal true, java_string == ruby_string
 
     # THINK ABOUT IT:
     #
@@ -86,19 +88,21 @@ class AboutJavaInterop < EdgeCase::Koan
     #
     # Is there a way to make Ruby/Java string comparisons commutative?
     # How would you do it?
+    #
+    # XXX TODO
   end
 
   def test_however_most_methods_returning_strings_return_ruby_strings
     java_array = java.util.ArrayList.new
-    assert_equal __, java_array.toString
-    assert_equal __, java_array.toString.is_a?(String)
-    assert_equal __, java_array.toString.is_a?(java.lang.String)
+    assert_equal '[]', java_array.toString
+    assert_equal true, java_array.toString.is_a?(String)
+    assert_equal false, java_array.toString.is_a?(java.lang.String)
   end
 
   def test_java_collections_are_enumerable
     java_array = java.util.ArrayList.new
     java_array << "one" << "two" << "three"
-    assert_equal __, java_array.map { |item| item.upcase }
+    assert_equal ['ONE', 'TWO', 'THREE'], java_array.map { |item| item.upcase }
   end
 
   # ------------------------------------------------------------------
@@ -118,7 +122,7 @@ class AboutJavaInterop < EdgeCase::Koan
     java_array = java.util.ArrayList.new
     java_array.add_all([1,2,3,4,5])
 
-    assert_equal __, java_array.multiply_all
+    assert_equal 1*2*3*4*5, java_array.multiply_all
   end
 
 end

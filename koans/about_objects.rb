@@ -30,6 +30,7 @@ class AboutObjects < EdgeCase::Koan
     assert_equal true, obj.object_id != another_obj.object_id
   end
 
+  # FIXME TODO: not compatable with Rubinius
   def test_some_system_objects_always_have_the_same_id
     assert_equal 0, false.object_id
     assert_equal 2, true.object_id
